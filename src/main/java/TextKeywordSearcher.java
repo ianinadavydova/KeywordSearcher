@@ -1,7 +1,5 @@
 package main.java;
 
-import main.java.Keywords;
-
 import javax.lang.model.SourceVersion;
 import java.io.*;
 import java.util.*;
