@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Objects;
 
 import static org.junit.Assert.assertTrue;
 
@@ -64,11 +65,7 @@ public abstract class AbstractKeywordSearcherTest {
             String correctString = correct.readLine();
             if (resultString == null && correctString == null)
                 return true;
-            if (resultString != null && correctString != null) {
-                if (!resultString.equals(correctString))
-                    return false;
-            }
-            else
+            if (!Objects.equals(resultString, correctString))
                 return false;
         }
     }
