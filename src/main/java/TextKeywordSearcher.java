@@ -1,38 +1,34 @@
 package main.java;
 
-import javax.lang.model.SourceVersion;
 import java.io.*;
 import java.util.*;
 
 public class TextKeywordSearcher {
     public static void searchKeywords(String inputFile) throws IOException {
-        FileReader inputFileReader = new FileReader(inputFile);
-        BufferedReader inputBufferedReader = new BufferedReader(inputFileReader);
+        Map<String, Integer> countedKeywords = new HashMap<>();
 
-        String inputString;
+        try (BufferedReader inputBufferedReader = new BufferedReader(new FileReader(inputFile))) {
+            String inputString;
 
-        HashMap<String, Integer> countedKeywords = new HashMap<String, Integer>();
-
-        while ((inputString = inputBufferedReader.readLine()) != null) {
-            StringTokenizer words = new StringTokenizer(inputString, " \t(){}[];.<>");
-            while (words.hasMoreTokens()) {
-                String word = words.nextToken();
-                if (SourceVersion.isKeyword(word)) {
-                    Integer oldValue = countedKeywords.getOrDefault(word, 0);
-                    countedKeywords.put(word, oldValue + 1);
+            while ((inputString = inputBufferedReader.readLine()) != null) {
+                StringTokenizer words = new StringTokenizer(inputString, " \t(){}[];.<>");
+                while (words.hasMoreTokens()) {
+                    KeywordUtil.recognizeWord(countedKeywords, words.nextToken());
                 }
             }
         }
 
-        inputBufferedReader.close();
-
         List<Map.Entry<String, Integer>> sortedItems = new ArrayList<>(countedKeywords.entrySet());
         Collections.sort(sortedItems, (a, b) -> b.getValue().compareTo(a.getValue()));
 
-        PrintWriter outputWriter = new PrintWriter(inputFile + ".searchKeywords");
-        for (Map.Entry<String, Integer> countedKeyword: sortedItems) {
-            outputWriter.write(String.format("%s" + " " + "%s\n", countedKeyword.getKey(), countedKeyword.getValue()));
+        writeResult(sortedItems, inputFile + ".searchKeywords");
+    }
+
+    private static void writeResult(List<Map.Entry<String, Integer>> items, String path) throws IOException {
+        try (PrintWriter outputWriter = new PrintWriter(path)) {
+            for (Map.Entry<String, Integer> countedKeyword: items) {
+                outputWriter.write(String.format("%s" + " " + "%s\n", countedKeyword.getKey(), countedKeyword.getValue()));
+            }
         }
-        outputWriter.close();
     }
 }
