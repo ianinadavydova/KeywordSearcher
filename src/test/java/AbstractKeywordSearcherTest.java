@@ -36,7 +36,7 @@ public abstract class AbstractKeywordSearcherTest {
     }
 
     @Test
-    public void Dot() throws IOException {
+    public void dot() throws IOException {
         String inputTestFile = "test_data\\Dot.java";
         testImplementation(inputTestFile);
     }
