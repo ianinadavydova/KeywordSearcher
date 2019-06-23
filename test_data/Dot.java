@@ -1,0 +1,1 @@
+Class<Integer> aClass = Integer.class;
